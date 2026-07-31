@@ -206,7 +206,28 @@ def fetch_arbeitnow_jobs():
             continue
 
         is_remote = job.get("remote", False)
-        location = "Remote" if is_remote else (job.get("location") or "Not specified")
+        raw_location = (job.get("location") or "").strip()
+        location_lower = raw_location.lower()
+
+        # Arbeitnow is a global board with no country filter, so without this
+        # check you'd get every matching role worldwide (London, Berlin, etc).
+        # Keep it if: the location text mentions India, OR it's remote with
+        # no other country explicitly named (i.e. not "Remote (UK only)").
+        mentions_india = "india" in location_lower
+        mentions_other_country = any(
+            c in location_lower for c in [
+                "uk", "united kingdom", "london", "usa", "united states",
+                "canada", "germany", "berlin", "australia", "singapore",
+                "uae", "dubai", "netherlands", "france", "spain", "poland",
+            ]
+        )
+
+        if mentions_india:
+            location = raw_location
+        elif is_remote and not mentions_other_country:
+            location = "Remote (open to India, per posting)"
+        else:
+            continue  # not India-based and not open-remote -> skip
 
         created_ts = job.get("created_at")
         created_str = time.strftime("%Y-%m-%d", time.gmtime(created_ts / 1000)) if created_ts else ""
@@ -256,12 +277,24 @@ def fetch_jsearch_jobs():
 
     normalized = []
     for job in results:
+        country = (job.get("job_country") or "").strip().upper()
+        is_remote = job.get("job_is_remote", False)
+
+        # JSearch aggregates globally; the "in India" query text is a hint,
+        # not a hard filter, so double-check the actual country field too.
+        if country and country != "IN" and not is_remote:
+            continue
+
+        location = job.get("job_city") or job.get("job_country") or "India"
+        if is_remote and country and country != "IN":
+            location = f"Remote (posted for {country})"
+
         normalized.append({
             "source": "JSearch (LinkedIn/Indeed/Glassdoor)",
             "id": f"jsearch:{job.get('job_id')}",
             "title": job.get("job_title", "Untitled role"),
             "company": job.get("employer_name", "Unknown company"),
-            "location": job.get("job_city") or job.get("job_country") or "India",
+            "location": location,
             "url": job.get("job_apply_link", ""),
             "created": (job.get("job_posted_at_datetime_utc") or "")[:10],
             "description": job.get("job_description", ""),
