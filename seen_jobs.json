@@ -410,6 +410,9 @@
     "adzuna:5838722128",
     "adzuna:5838756841",
     "adzuna:5840001648",
+    "adzuna:5840175922",
+    "adzuna:5840193003",
+    "adzuna:5840225865",
     "arbeitnow:agentic-ai-software-engineer-munich-433219",
     "arbeitnow:data-engineer-london-134322",
     "arbeitnow:data-engineer-london-313309",
@@ -540,6 +543,7 @@
     "jooble:966691140223483977"
   ],
   "fingerprints": [
+    "10xscaleai::gcp data engineer",
     "2028 takeda innovations india::data engineering professional ii",
     "3pillarglobal::data engineer",
     "accenture::ai infrastructure architect",
@@ -553,6 +557,7 @@
     "accenture::knowledge engineer",
     "accenture::large language model architect",
     "acme services private limited::data engineer snowflake spark databricks python",
+    "adci blr dta::data engineer i cmt",
     "adobe::computer scientist python",
     "adobe::senior data engineer",
     "alignity solutions::gen ai engineer with python consultant senior consultant",
@@ -591,6 +596,7 @@
     "barclays::data scientist",
     "betsol::senior data architect",
     "blackrock::vp senior data engineer pythonsnowflakeapache airflow",
+    "bluestone solutions group::associate risk reporting technical em ssb",
     "bmw techworks::junior data visualization engineer quicksight",
     "bmw techworks::senior quicksight developer",
     "bosch group::data engineerai",
